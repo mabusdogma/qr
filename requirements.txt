@@ -3,7 +3,6 @@ opencv-python
 DateTime
 numpy
 openpyxl
-python3-opencv
 ffmpeg
 libsm6
 libxext6
