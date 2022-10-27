@@ -5,4 +5,6 @@ DateTime
 numpy
 openpyxl
 ffmpeg
-
+./1.4.0/streamlit-1.4.0-py2.py3-none-any.whl
+opencv-python-headless
+click==8
