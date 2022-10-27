@@ -4,5 +4,4 @@ DateTime
 numpy
 openpyxl
 ffmpeg
-libsm6
 libxext6
