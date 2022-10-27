@@ -1,6 +1,5 @@
 pip==22.3
 streamlit
-opencv-python
 DateTime
 numpy
 openpyxl
