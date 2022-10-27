@@ -19,7 +19,7 @@ st.write('<style>div.block-container{padding-top:0rem;}</style>', unsafe_allow_h
 
 
 log= "movimientos.csv"
-image = camera_input_live(debounce=100)
+image = camera_input_live(debounce=600)
 
 #esconde el primer radio button
 st.markdown(
