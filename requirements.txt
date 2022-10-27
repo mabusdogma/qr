@@ -4,4 +4,4 @@ DateTime
 numpy
 openpyxl
 ffmpeg
-pip==22.0.3
+pip==22.3
