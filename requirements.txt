@@ -3,6 +3,6 @@ streamlit
 DateTime
 numpy
 openpyxl
-ffmpeg
 opencv-python-headless
-click
+streamlit-camera-input-live
+
