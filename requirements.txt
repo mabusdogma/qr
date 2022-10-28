@@ -3,5 +3,4 @@ DateTime
 numpy
 qrcode
 opencv-python-headless
-streamlit-camera-input-live
 
