@@ -1,6 +1,7 @@
 import cv2, datetime,qrcode
 import numpy as np
 import streamlit as st
+from camera_input_live import camera_input_live
 
 #Configuración inicial, esconde menu hamburguesa arriba a la derecha y publicidad debajo(footer)
 st.set_page_config(page_title='Actualizador del catalogo de libros', page_icon='qr.ico', layout="centered", initial_sidebar_state="collapsed", menu_items=None)
@@ -25,9 +26,20 @@ st.markdown(
         """,
     unsafe_allow_html=True
 )
-image = st.camera_input("QR",label_visibility="collapsed")
+
+#detiene la camara si ya se tiene codigo QR
+if "found_qr" not in st.session_state:
+    st.session_state.found_qr = False
+if "qr_code_image" not in st.session_state:
+    st.session_state.qr_code_image = None
+if not st.session_state["found_qr"]:
+    image = camera_input_live(debounce=500)
+else:
+    image = st.session_state.qr_code_image
+
 #comienza video para buscar QR
 if image is not None:
+    st.image(image)
     bytes_data = image.getvalue()
     cv2_img = cv2.imdecode(np.frombuffer(bytes_data, np.uint8), cv2.IMREAD_COLOR)
     detector = cv2.QRCodeDetector()
