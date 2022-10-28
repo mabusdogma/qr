@@ -51,7 +51,7 @@ if image is not None:
         # pide datos sobre el libro
         #with st.form(key="forma"):
         with col1:
-            status = st.radio("Seleccione opcion: ", ('nada','Libro nuevo', 'Se presta libro', 'Se devuelve libro'))
+            status = st.radio("Seleccione opción: ", ('nada','Libro nuevo', 'Se presta libro', 'Se devuelve libro'))
             if (status == 'Libro nuevo'):
                 estado = 'nuevo'    
                 with st.form(key='nuevo'):
