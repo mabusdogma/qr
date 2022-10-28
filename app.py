@@ -33,7 +33,7 @@ if "found_qr" not in st.session_state:
 if "qr_code_image" not in st.session_state:
     st.session_state.qr_code_image = None
 if not st.session_state["found_qr"]:
-    image = camera_input_live(debounce=250)
+    image = camera_input_live(debounce=500)
 else:
     image = st.session_state.qr_code_image
 
