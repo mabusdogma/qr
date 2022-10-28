@@ -60,7 +60,7 @@ if image is not None:
                     if submit_button:
                         st.success("Libro nuevo!")
                         with open(log, 'a',encoding='utf-8-sig') as o:
-                            o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
+                            o.write(f'{codigo},{apellido},{nombre},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
             if (status == 'Se presta libro'):
                 estado = 'prestado'
                 with st.form(key='prestado'):
@@ -69,7 +69,7 @@ if image is not None:
                     if submit_button:                     
                         st.success("Prestado!")
                         with open(log, 'a',encoding='utf-8-sig') as o:
-                            o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
+                            o.write(f'{codigo},{apellido},{nombre},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
             if (status == 'Se devuelve libro'):
                 estado = 'devuelto'
                 with st.form(key='devuelto'):
@@ -78,7 +78,7 @@ if image is not None:
                     if submit_button:                      
                         st.success("Devuelto!")
                         with open(log, 'a',encoding='utf-8-sig') as o:
-                            o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
+                            o.write(f'{codigo},{apellido},{nombre},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
     
         #donde se guardan los cambios en los libros
         with open(log, "rb") as file:

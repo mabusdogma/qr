@@ -1,9 +1,2 @@
-Codigo,Nombre,Apellido,Titulo,Fecha,Hora,Accion,Identificacion
-K0121,Stephen,King,Carrie,27/10/2022,12:51,prestado,2134134
-K0121,Stephen,King,Carrie,27/10/2022,13:39,prestado,123456
-K0121,Stephen,King,Carrie,27/10/2022,13:52,nuevo,2345324
-K0121,Stephen,King,Carrie,27/10/2022,18:43,nuevo,tarjeta
-K0121,Stephen,King,Carrie,28/10/2022,00:57,nuevo,1231432
-K0121,Stephen,King,Carrie,28/10/2022,01:26,prestado,4352567
-K0121,Stephen,King,Carrie,28/10/2022,01:54,nuevo,1231
-K0121,Stephen,King,Carrie,28/10/2022,02:02,devuelto,5645657
+Codigo,Apellido,Nombre,Titulo,Fecha,Hora,Accion,Identificacion
+K0121,King,Stephen,Carrie,28/10/2022,12:51,prestado,2134134
