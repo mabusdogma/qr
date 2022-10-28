@@ -43,7 +43,7 @@ if image is not None:
             st.image(QRfile)
             log= "movimientos.csv"
         #Se separa información del codigo de barras
-        if re.search(r" - ", data):
+        if re.search(" - ", str(data.value)):
             codigo = data.split(' - ')[0]
             nombre = data.split(' - ')[1]
             apellido = data.split(' - ')[2]
