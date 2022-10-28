@@ -43,11 +43,14 @@ if image is not None:
             st.image(QRfile)
             log= "movimientos.csv"
         #Se separa información del codigo de barras
-        codigo = data.split(' - ')[0]
-        nombre = data.split(' - ')[1]
-        apellido = data.split(' - ')[2]
-        titulo = data.split(' - ')[3]
-        ahora = datetime.datetime.now()
+        if re.search(r" - ", data):
+            codigo = data.split(' - ')[0]
+            nombre = data.split(' - ')[1]
+            apellido = data.split(' - ')[2]
+            titulo = data.split(' - ')[3]
+            ahora = datetime.datetime.now()
+        else:
+            codigo = data
         # pide datos sobre el libro
         #with st.form(key="forma"):
         with col1:
