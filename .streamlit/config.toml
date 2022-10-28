@@ -1,0 +1,9 @@
+[theme]
+primaryColor="red"
+backgroundColor="black"
+secondaryBackgroundColor="dark grey"
+textColor="white"
+font="sans serif"
+
+[server]
+port=8501

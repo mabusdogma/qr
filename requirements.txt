@@ -1,7 +1,7 @@
 streamlit
 DateTime
 numpy
-openpyxl
+qrcode
 opencv-python-headless
 streamlit-camera-input-live
 

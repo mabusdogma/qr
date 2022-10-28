@@ -1,7 +1,6 @@
-import cv2, datetime
+import cv2, datetime,qrcode
 import numpy as np
 import streamlit as st
-
 from camera_input_live import camera_input_live
 
 #Configuración inicial, esconde menu hamburguesa arriba a la derecha y publicidad debajo(footer)
@@ -17,10 +16,6 @@ st.markdown(hide_menu_style, unsafe_allow_html=True)
 #Quita el hueco en la parte superior
 st.write('<style>div.block-container{padding-top:0rem;}</style>', unsafe_allow_html=True)
 
-
-log= "movimientos.csv"
-image = camera_input_live(debounce=600)
-
 #esconde el primer radio button
 st.markdown(
     """ <style>
@@ -32,7 +27,17 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+#detiene la camara si ya se tiene codigo QR
+if "found_qr" not in st.session_state:
+    st.session_state.found_qr = False
+if "qr_code_image" not in st.session_state:
+    st.session_state.qr_code_image = None
+if not st.session_state["found_qr"]:
+    image = camera_input_live(debounce=250)
+else:
+    image = st.session_state.qr_code_image
 
+#comienza video para buscar QR
 if image is not None:
     st.image(image)
     bytes_data = image.getvalue()
@@ -40,11 +45,27 @@ if image is not None:
     detector = cv2.QRCodeDetector()
     data, bbox, straight_qrcode = detector.detectAndDecode(cv2_img)
 
+    col1, col2, col3 = st.columns([2, 2, 1])
+    #donde se guardan los cambios en los libros
+    log= "movimientos.csv"
+    with open(log, "rb") as file:
+        col3.download_button(
+        label="Descarga CSV",
+        data=file,
+        file_name=log,
+        mime="text/csv")
+
+
     if data:
-        st.write(data)
-        with st.expander("Detalles"):
-            st.write("BBox:", bbox)
-            st.write("Codigo QR:", straight_qrcode)
+        st.session_state["found_qr"] = True
+        st.session_state["qr_code_image"] = image
+        with col2.expander(data):
+            #st.write("BBox:", bbox)
+            #st.write("Codigo QR:", straight_qrcode)
+            QRfile = "tempqr.png"
+            QRimage = qrcode.make(data)
+            QRimage.save(QRfile)
+            st.image(QRfile)
  
         #Se separa información del codigo de barras
         codigo = data.split(' - ')[0]
@@ -54,32 +75,32 @@ if image is not None:
         ahora = datetime.datetime.now()
         # pide datos sobre el libro
         #with st.form(key="forma"):
-        status = st.radio("Seleccione opcion: ", ('nada','Libro nuevo', 'Se presta libro', 'Se devuelve libro'))
-        if (status == 'Libro nuevo'):
-            estado = 'nuevo'    
-            with st.form(key='nuevo'):
-                id = st.text_input(label='Identificación de quien lo regala', key="nuevo2").strip()
-                submit_button = st.form_submit_button(label='OK')
-                if submit_button:
-                    st.success("Marcado como nuevo")
-                    with open(log, 'a',encoding="utf-8-sig") as o:
-                        o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
-        if (status == 'Se presta libro'):
-            estado = 'prestado'
-            with st.form(key='prestado'):
-                id = st.text_input(label='Identificación de quien lo pide prestado', key="prestado2").strip()  
-                submit_button = st.form_submit_button(label='OK')
-                if submit_button:                     
-                    st.success("Marcado como prestado")
-                    with open(log, 'a',encoding="utf-8-sig") as o:
-                        o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
-        if (status == 'Se devuelve libro'):
-            estado = 'devuelto'
-            with st.form(key='devuelto'):
-                id = st.text_input(label='Identificación de quien lo pide devuelto', key="devuelto2").strip()  
-                submit_button = st.form_submit_button(label='OK')
-                if submit_button:                      
-                    st.success("Marcado como devuelto")
-                    with open(log, 'a',encoding="utf-8-sig") as o:
-                        o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
-#cv2.waitKey(1)
+        with col1:
+            status = st.radio("Seleccione opcion: ", ('nada','Libro nuevo', 'Se presta libro', 'Se devuelve libro'))
+            if (status == 'Libro nuevo'):
+                estado = 'nuevo'    
+                with st.form(key='nuevo'):
+                    id = st.text_input(label='Identificación de quien lo regala', key="nuevo2").strip()
+                    submit_button = st.form_submit_button(label='OK')
+                    if submit_button:
+                        st.success("Libro nuevo!")
+                        with open(log, 'a',encoding="utf-8-sig") as o:
+                            o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
+            if (status == 'Se presta libro'):
+                estado = 'prestado'
+                with st.form(key='prestado'):
+                    id = st.text_input(label='Identificación de quien lo pide prestado', key="prestado2").strip()  
+                    submit_button = st.form_submit_button(label='OK')
+                    if submit_button:                     
+                        st.success("Prestado!")
+                        with open(log, 'a',encoding="utf-8-sig") as o:
+                            o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
+            if (status == 'Se devuelve libro'):
+                estado = 'devuelto'
+                with st.form(key='devuelto'):
+                    id = st.text_input(label='Identificación de quien lo pide devuelto', key="devuelto2").strip()  
+                    submit_button = st.form_submit_button(label='OK')
+                    if submit_button:                      
+                        st.success("Devuelto!")
+                        with open(log, 'a',encoding="utf-8-sig") as o:
+                            o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
