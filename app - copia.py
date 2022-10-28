@@ -1,4 +1,4 @@
-import cv2, datetime,qrcode, csv
+import cv2, datetime,qrcode
 import numpy as np
 import streamlit as st
 
@@ -11,15 +11,22 @@ hide_menu_style = """
         </style>
         """
 st.markdown(hide_menu_style, unsafe_allow_html=True)
+
 #Quita el hueco en la parte superior
 st.write('<style>div.block-container{padding-top:0rem;}</style>', unsafe_allow_html=True)
+
 #esconde el primer radio button
-st.markdown(""" <style>div[role="radiogroup"] >  :first-child{display: none !important;}</style>""",unsafe_allow_html=True)
-  
- # -------------
-  
-#crea la camara  
+st.markdown(
+    """ <style>
+            div[role="radiogroup"] >  :first-child{
+                display: none !important;
+            }
+        </style>
+        """,
+    unsafe_allow_html=True
+)
 image = st.camera_input("QR",label_visibility="collapsed")
+
 
 #comienza video para buscar QR
 if image is not None:
@@ -28,8 +35,16 @@ if image is not None:
     detector = cv2.QRCodeDetector()
     data, bbox, straight_qrcode = detector.detectAndDecode(cv2_img)
 
-    #hace las columnas
     col1, col2, col3 = st.columns([2, 2, 1])
+    #donde se guardan los cambios en los libros
+    log= "movimientos.csv"
+    with open(log, "rb") as file:
+        col3.download_button(
+        label="Descarga CSV",
+        data=file,
+        file_name=log,
+        mime="text/csv")
+
 
     if data:
         st.session_state["found_qr"] = True
@@ -41,7 +56,7 @@ if image is not None:
             QRimage = qrcode.make(data)
             QRimage.save(QRfile)
             st.image(QRfile)
-            log= "movimientos.csv"
+ 
         #Se separa información del codigo de barras
         codigo = data.split(' - ')[0]
         nombre = data.split(' - ')[1]
@@ -59,7 +74,7 @@ if image is not None:
                     submit_button = st.form_submit_button(label='OK')
                     if submit_button:
                         st.success("Libro nuevo!")
-                        with open(log, 'a',encoding='utf-8-sig') as o:
+                        with open(log, 'a',encoding="utf-8-sig") as o:
                             o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
             if (status == 'Se presta libro'):
                 estado = 'prestado'
@@ -68,7 +83,7 @@ if image is not None:
                     submit_button = st.form_submit_button(label='OK')
                     if submit_button:                     
                         st.success("Prestado!")
-                        with open(log, 'a',encoding='utf-8-sig') as o:
+                        with open(log, 'a',encoding="utf-8-sig") as o:
                             o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
             if (status == 'Se devuelve libro'):
                 estado = 'devuelto'
@@ -77,13 +92,5 @@ if image is not None:
                     submit_button = st.form_submit_button(label='OK')
                     if submit_button:                      
                         st.success("Devuelto!")
-                        with open(log, 'a',encoding='utf-8-sig') as o:
+                        with open(log, 'a',encoding="utf-8-sig") as o:
                             o.write(f'{codigo},{nombre},{apellido},{titulo},{ahora.strftime("%d/%m/%Y")},{ahora.strftime("%H:%M")},{estado},{id}\n') 
-    
-        #donde se guardan los cambios en los libros
-        with open(log, "rb") as file:
-            col3.download_button(
-            label="Descarga CSV",
-            data=file,
-            file_name=log,
-            mime="text/csv")
