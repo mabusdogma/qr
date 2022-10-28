@@ -3,4 +3,3 @@ DateTime
 numpy
 qrcode
 opencv-python-headless
-
