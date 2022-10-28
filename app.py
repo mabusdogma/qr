@@ -1,4 +1,4 @@
-import cv2, datetime,qrcode, csv
+import cv2, datetime,qrcode, csv, re
 import numpy as np
 import streamlit as st
 
@@ -43,7 +43,7 @@ if image is not None:
             st.image(QRfile)
             log= "movimientos.csv"
         #Se separa información del codigo de barras
-        if re.search(" - ", str(data.value)):
+        if re.search(" - ", data):
             codigo = data.split(' - ')[0]
             nombre = data.split(' - ')[1]
             apellido = data.split(' - ')[2]
@@ -51,6 +51,8 @@ if image is not None:
             ahora = datetime.datetime.now()
         else:
             codigo = data
+            apellido, nombre, titulo = '','',''
+            ahora = datetime.datetime.now()
         # pide datos sobre el libro
         #with st.form(key="forma"):
         with col1:
